@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REALPOOH - KEY MANAGEMENT</title>
-    <!-- นำเข้าฟอนต์น่ารักตัวหนานมนูน (Fredoka) -->
+    <!-- ฟอนต์ตัวการ์ตูนนูนดุ๊กดิ๊ก -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
@@ -20,13 +20,13 @@
             overflow: hidden;
         }
 
-        /* ----- ฟอนต์สไตล์การ์ตูนนูน (Bubble Font แบบในรูป) ----- */
+        /* ----- ฟอนต์สไตล์การ์ตูนนูน (Bubble Font) ----- */
         .bubble-font {
             font-family: 'Fredoka', cursive, sans-serif;
             font-weight: 700;
             color: #ffffff;
-            -webkit-text-stroke: 4px #000000; /* ขอบเส้นดำหนา */
-            filter: drop-shadow(4px 4px 0px #000000); /* เงานูน 3D */
+            -webkit-text-stroke: 4px #000000;
+            filter: drop-shadow(4px 4px 0px #000000);
             letter-spacing: 2px;
         }
 
@@ -44,93 +44,102 @@
         .floating-item {
             position: absolute;
             font-size: 3rem;
-            opacity: 0.25; /* ความโปร่งแสงลอยหลัง UI */
+            opacity: 0.25;
             user-select: none;
             animation: floatAround 12s ease-in-out infinite alternate;
         }
 
-        /* สุ่มตำแหน่งและทิศทางลอย */
-        .pos-1 { top: 10%; left: 8%; animation-duration: 8s; }
-        .pos-2 { top: 15%; right: 10%; animation-duration: 11s; animation-delay: -2s; }
-        .pos-3 { top: 45%; left: 5%; animation-duration: 9s; animation-delay: -4s; }
-        .pos-4 { top: 50%; right: 6%; animation-duration: 13s; animation-delay: -1s; }
-        .pos-5 { bottom: 10%; left: 15%; animation-duration: 10s; animation-delay: -3s; }
-        .pos-6 { bottom: 12%; right: 18%; animation-duration: 14s; animation-delay: -5s; }
+        .pos-1 { top: 8%; left: 5%; animation-duration: 8s; }
+        .pos-2 { top: 12%; right: 8%; animation-duration: 11s; animation-delay: -2s; }
+        .pos-3 { top: 45%; left: 3%; animation-duration: 9s; animation-delay: -4s; }
+        .pos-4 { top: 50%; right: 4%; animation-duration: 13s; animation-delay: -1s; }
+        .pos-5 { bottom: 8%; left: 10%; animation-duration: 10s; animation-delay: -3s; }
+        .pos-6 { bottom: 10%; right: 12%; animation-duration: 14s; animation-delay: -5s; }
 
         @keyframes floatAround {
-            0% {
-                transform: translate(0, 0) rotate(-5deg) scale(1);
-            }
-            50% {
-                transform: translate(30px, -40px) rotate(8deg) scale(1.08);
-            }
-            100% {
-                transform: translate(-20px, 30px) rotate(-8deg) scale(0.95);
-            }
+            0% { transform: translate(0, 0) rotate(-5deg) scale(1); }
+            50% { transform: translate(30px, -40px) rotate(8deg) scale(1.08); }
+            100% { transform: translate(-20px, 30px) rotate(-8deg) scale(0.95); }
         }
 
-        /* ----- UI Box (กล่องสีดำ) ----- */
+        /* ----- UI Box (กล่องสีดำใหญ่เต็มจอ) ----- */
         .container { 
             position: relative;
             z-index: 10;
             width: 100%; 
-            max-width: 480px; 
+            max-width: 500px; 
             background: #000000; 
-            padding: 32px; 
+            padding: 32px 24px; 
             border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             color: #ffffff;
         }
 
         .brand-title {
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 24px;
-            opacity: 1;
         }
 
-        /* เมนูหมวดหมู่ */
-        .tab-menu { 
+        /* เมนูหมวดหมู่แบบใหญ่ 3 บรรทัด (Vertical Tabs) */
+        .tab-menu-vertical { 
             display: flex; 
-            gap: 8px; 
-            background: #18181b; 
-            padding: 6px; 
-            border-radius: 12px; 
+            flex-direction: column;
+            gap: 12px; 
             margin-bottom: 24px; 
+            width: 100%;
         }
         
-        .tab-btn { 
-            flex: 1; 
-            padding: 12px 6px; 
-            border: none; 
-            background: transparent; 
+        .tab-btn-large { 
+            width: 100%;
+            padding: 18px 20px; 
+            border: 2px solid #27272a; 
+            background: #18181b; 
             color: #a1a1aa; 
             font-weight: 700; 
-            font-size: 0.9rem;
+            font-size: 1.2rem;
             cursor: pointer; 
-            border-radius: 8px; 
-            transition: 0.2s; 
+            border-radius: 14px; 
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .tab-btn:hover { color: #ffffff; }
-        .tab-btn.active { 
+        .tab-btn-large:hover { 
+            border-color: #ffffff;
+            color: #ffffff;
+            background: #27272a;
+        }
+
+        .tab-btn-large.active { 
             background: #ffffff; 
             color: #000000; 
+            border-color: #ffffff;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
         }
 
-        /* เนื้อหาในหมวดหมู่ */
-        .tab-content { display: none; }
+        /* พื้นที่เนื้อหาหมวดหมู่ */
+        .tab-content { 
+            display: none; 
+            background: #18181b;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #27272a;
+            margin-top: 10px;
+        }
         .tab-content.active { display: block; }
 
         .tab-header {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
             margin-bottom: 6px;
+            color: #ffffff;
         }
 
         .tab-desc {
             font-size: 0.85rem;
-            color: #71717a;
+            color: #a1a1aa;
             margin-bottom: 20px;
         }
 
@@ -140,12 +149,12 @@
         
         input, select { 
             width: 100%; 
-            padding: 12px 14px; 
+            padding: 14px; 
             border-radius: 10px; 
             border: 1px solid #27272a; 
-            background: #18181b; 
+            background: #09090b; 
             color: #ffffff; 
-            font-size: 0.95rem; 
+            font-size: 1rem; 
             outline: none;
         }
 
@@ -155,11 +164,11 @@
 
         .btn { 
             width: 100%; 
-            padding: 12px; 
+            padding: 14px; 
             border: none; 
             border-radius: 10px; 
             font-weight: 700; 
-            font-size: 0.95rem;
+            font-size: 1rem;
             cursor: pointer; 
             transition: 0.2s; 
             margin-top: 10px;
@@ -174,7 +183,7 @@
 </head>
 <body>
 
-    <!-- ข้อความลอยวนเวียนอยู่หลัง UI (สไตล์การ์ตูนนูน) -->
+    <!-- ข้อความลอยวนเวียนอยู่หลัง UI -->
     <div class="bg-container">
         <div class="floating-item bubble-font pos-1">REALPOOH</div>
         <div class="floating-item bubble-font pos-2">REALPOOH</div>
@@ -188,14 +197,23 @@
     <div class="container">
         <div class="brand-title bubble-font">REALPOOH</div>
 
-        <!-- 3 หมวดหมู่ -->
-        <div class="tab-menu">
-            <button class="tab-btn active" onclick="switchTab('use-key', this)">กดคีย์</button>
-            <button class="tab-btn" onclick="switchTab('delete-key', this)">ลบคีย์</button>
-            <button class="tab-btn" onclick="switchTab('manage-key', this)">จัดการคีย์</button>
+        <!-- 3 หมวดหมู่ ปุ่มใหญ่เต็มจอ 3 บรรทัด -->
+        <div class="tab-menu-vertical">
+            <button class="tab-btn-large active" onclick="switchTab('use-key', this)">
+                <span>🔑 กดคีย์</span>
+                <span>➔</span>
+            </button>
+            <button class="tab-btn-large" onclick="switchTab('delete-key', this)">
+                <span>🗑️ ลบคีย์</span>
+                <span>➔</span>
+            </button>
+            <button class="tab-btn-large" onclick="switchTab('manage-key', this)">
+                <span>⚙️ จัดการคีย์</span>
+                <span>➔</span>
+            </button>
         </div>
 
-        <!-- หมวดที่ 1: กดคีย์ -->
+        <!-- เนื้อหาหมวดที่ 1: กดคีย์ -->
         <div id="use-key" class="tab-content active">
             <div class="tab-header">🔑 กดใช้งานคีย์</div>
             <div class="tab-desc">กรอกรหัสคีย์เพื่อเปิดใช้งานระบบ</div>
@@ -206,7 +224,7 @@
             <button class="btn btn-white">เปิดใช้งานคีย์</button>
         </div>
 
-        <!-- หมวดที่ 2: ลบคีย์ -->
+        <!-- เนื้อหาหมวดที่ 2: ลบคีย์ -->
         <div id="delete-key" class="tab-content">
             <div class="tab-header">🗑️ ลบข้อมูลคีย์</div>
             <div class="tab-desc">ระบุคีย์เพื่อถอนสิทธิ์จากระบบ</div>
@@ -217,7 +235,7 @@
             <button class="btn btn-danger">ยืนยันการลบคีย์</button>
         </div>
 
-        <!-- หมวดที่ 3: จัดการคีย์ -->
+        <!-- เนื้อหาหมวดที่ 3: จัดการคีย์ -->
         <div id="manage-key" class="tab-content">
             <div class="tab-header">⚙️ จัดการคีย์ในระบบ</div>
             <div class="tab-desc">แก้ไขรายละเอียดและล็อกโดเมน</div>
@@ -241,7 +259,7 @@
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
+            document.querySelectorAll('.tab-btn-large').forEach(btn => {
                 btn.classList.remove('active');
             });
 
