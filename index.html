@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REALPOOH - KEY MANAGEMENT</title>
-    <!-- ฟอนต์ตัวการ์ตูนนูนดุ๊กดิ๊ก -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+    <!-- ฟอนต์การ์ตูนน่ารัก นุ่มฟู (Mali & Gaegu) -->
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Mali:wght@700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Mali', cursive, sans-serif; }
         
         body { 
             background-color: #ffffff; 
@@ -20,68 +20,104 @@
             overflow: hidden;
         }
 
-        /* ----- ฟอนต์สไตล์การ์ตูนนูน (Bubble Font) ----- */
+        /* ----- ฟอนต์นูนการ์ตูนน่ารักดุ๊กดิ๊ก ----- */
         .bubble-font {
-            font-family: 'Fredoka', cursive, sans-serif;
+            font-family: 'Gaegu', 'Mali', cursive, sans-serif;
             font-weight: 700;
             color: #ffffff;
             -webkit-text-stroke: 4px #000000;
-            filter: drop-shadow(4px 4px 0px #000000);
-            letter-spacing: 2px;
+            filter: drop-shadow(4px 5px 0px #000000);
+            letter-spacing: 3px;
         }
 
-        /* ----- Background Floating REALPOOH ----- */
-        .bg-container {
+        /* ----- Container สำหรับให้คำลอยขึ้นมาเรื่อยๆ ----- */
+        .bg-spawn-container {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             z-index: 1;
             pointer-events: none;
+            overflow: hidden;
         }
 
-        .floating-item {
+        /* ตัวหนังสือลอยขึ้นเรื่อยๆ */
+        .floating-word {
             position: absolute;
-            font-size: 3rem;
-            opacity: 0.25;
+            opacity: 0.28;
             user-select: none;
-            animation: floatAround 12s ease-in-out infinite alternate;
+            white-space: nowrap;
+            animation: floatUp 10s linear forwards;
         }
 
-        .pos-1 { top: 8%; left: 5%; animation-duration: 8s; }
-        .pos-2 { top: 12%; right: 8%; animation-duration: 11s; animation-delay: -2s; }
-        .pos-3 { top: 45%; left: 3%; animation-duration: 9s; animation-delay: -4s; }
-        .pos-4 { top: 50%; right: 4%; animation-duration: 13s; animation-delay: -1s; }
-        .pos-5 { bottom: 8%; left: 10%; animation-duration: 10s; animation-delay: -3s; }
-        .pos-6 { bottom: 10%; right: 12%; animation-duration: 14s; animation-delay: -5s; }
-
-        @keyframes floatAround {
-            0% { transform: translate(0, 0) rotate(-5deg) scale(1); }
-            50% { transform: translate(30px, -40px) rotate(8deg) scale(1.08); }
-            100% { transform: translate(-20px, 30px) rotate(-8deg) scale(0.95); }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.28;
+            }
+            90% {
+                opacity: 0.28;
+            }
+            100% {
+                transform: translateY(-15vh) rotate(20deg) scale(1.1);
+                opacity: 0;
+            }
         }
 
-        /* ----- UI Box (กล่องสีดำใหญ่เต็มจอ) ----- */
+        /* ----- UI Box สีดำสนิท ----- */
         .container { 
             position: relative;
             z-index: 10;
             width: 100%; 
-            max-width: 500px; 
+            max-width: 480px; 
             background: #000000; 
             padding: 32px 24px; 
-            border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-radius: 28px; 
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
             color: #ffffff;
+            text-align: center;
+        }
+
+        /* ----- รูปภาพเลโก้หมุนเป็นวงกลม 🔄 ----- */
+        .lego-spin-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .lego-img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 6px 15px rgba(255,255,255,0.2);
+            /* แอนิเมชันหมุนเป็นวงกลมต่อเนื่อง */
+            animation: rotateLego 8s linear infinite;
+        }
+
+        @keyframes rotateLego {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .brand-title {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 24px;
+            text-shadow: 2px 2px 0px #000;
         }
 
-        /* เมนูหมวดหมู่แบบใหญ่ 3 บรรทัด (Vertical Tabs) */
+        /* เมนูหมวดหมู่ ปุ่มใหญ่ 3 บรรทัด */
         .tab-menu-vertical { 
             display: flex; 
             flex-direction: column;
@@ -92,14 +128,14 @@
         
         .tab-btn-large { 
             width: 100%;
-            padding: 18px 20px; 
-            border: 2px solid #27272a; 
+            padding: 16px 20px; 
+            border: 3px solid #27272a; 
             background: #18181b; 
             color: #a1a1aa; 
             font-weight: 700; 
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             cursor: pointer; 
-            border-radius: 14px; 
+            border-radius: 18px; 
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
@@ -110,52 +146,54 @@
             border-color: #ffffff;
             color: #ffffff;
             background: #27272a;
+            transform: translateY(-2px);
         }
 
         .tab-btn-large.active { 
             background: #ffffff; 
             color: #000000; 
             border-color: #ffffff;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            box-shadow: 0 6px 20px rgba(255,255,255,0.25);
         }
 
-        /* พื้นที่เนื้อหาหมวดหมู่ */
+        /* พื้นที่เนื้อหา */
         .tab-content { 
             display: none; 
             background: #18181b;
             padding: 24px;
-            border-radius: 16px;
-            border: 1px solid #27272a;
-            margin-top: 10px;
+            border-radius: 20px;
+            border: 2px solid #27272a;
+            text-align: left;
         }
         .tab-content.active { display: block; }
 
         .tab-header {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 6px;
             color: #ffffff;
         }
 
         .tab-desc {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: #a1a1aa;
             margin-bottom: 20px;
         }
 
         /* Form Controls */
         .form-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 8px; font-size: 0.85rem; color: #a1a1aa; font-weight: 600; }
+        label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #a1a1aa; font-weight: 700; }
         
         input, select { 
             width: 100%; 
             padding: 14px; 
-            border-radius: 10px; 
-            border: 1px solid #27272a; 
+            border-radius: 14px; 
+            border: 2px solid #27272a; 
             background: #09090b; 
             color: #ffffff; 
             font-size: 1rem; 
             outline: none;
+            font-family: 'Mali', cursive;
         }
 
         input:focus, select:focus {
@@ -166,35 +204,34 @@
             width: 100%; 
             padding: 14px; 
             border: none; 
-            border-radius: 10px; 
+            border-radius: 14px; 
             font-weight: 700; 
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer; 
             transition: 0.2s; 
             margin-top: 10px;
+            font-family: 'Mali', cursive;
         }
 
         .btn-white { background: #ffffff; color: #000000; }
-        .btn-white:hover { background: #e4e4e7; }
+        .btn-white:hover { background: #e4e4e7; transform: scale(1.02); }
 
         .btn-danger { background: #ef4444; color: #ffffff; }
-        .btn-danger:hover { background: #dc2626; }
+        .btn-danger:hover { background: #dc2626; transform: scale(1.02); }
     </style>
 </head>
 <body>
 
-    <!-- ข้อความลอยวนเวียนอยู่หลัง UI -->
-    <div class="bg-container">
-        <div class="floating-item bubble-font pos-1">REALPOOH</div>
-        <div class="floating-item bubble-font pos-2">REALPOOH</div>
-        <div class="floating-item bubble-font pos-3">REALPOOH</div>
-        <div class="floating-item bubble-font pos-4">REALPOOH</div>
-        <div class="floating-item bubble-font pos-5">REALPOOH</div>
-        <div class="floating-item bubble-font pos-6">REALPOOH</div>
-    </div>
+    <!-- พื้นหลังสำหรับปล่อยคำว่า REALPOOH ลอยขึ้นมาตลอดเวลา -->
+    <div class="bg-spawn-container" id="bgContainer"></div>
 
     <!-- UI หลักสีดำ -->
     <div class="container">
+        <!-- เลโก้หมุน 🔄 ด้านบน -->
+        <div class="lego-spin-wrapper">
+            <img class="lego-img" src="https://cdn.discordapp.com/attachments/1533053333546336346/1535327399540031548/IMG_6479.jpg?ex=6a775c91&is=6a760b11&hm=a0723cd91b4b17f61ddaedf1e8c704c9448fdca17541a6fc393e5c370d40a9d6&" alt="Lego Image">
+        </div>
+
         <div class="brand-title bubble-font">REALPOOH</div>
 
         <!-- 3 หมวดหมู่ ปุ่มใหญ่เต็มจอ 3 บรรทัด -->
@@ -213,7 +250,7 @@
             </button>
         </div>
 
-        <!-- เนื้อหาหมวดที่ 1: กดคีย์ -->
+        <!-- หมวดที่ 1: กดคีย์ -->
         <div id="use-key" class="tab-content active">
             <div class="tab-header">🔑 กดใช้งานคีย์</div>
             <div class="tab-desc">กรอกรหัสคีย์เพื่อเปิดใช้งานระบบ</div>
@@ -224,7 +261,7 @@
             <button class="btn btn-white">เปิดใช้งานคีย์</button>
         </div>
 
-        <!-- เนื้อหาหมวดที่ 2: ลบคีย์ -->
+        <!-- หมวดที่ 2: ลบคีย์ -->
         <div id="delete-key" class="tab-content">
             <div class="tab-header">🗑️ ลบข้อมูลคีย์</div>
             <div class="tab-desc">ระบุคีย์เพื่อถอนสิทธิ์จากระบบ</div>
@@ -235,7 +272,7 @@
             <button class="btn btn-danger">ยืนยันการลบคีย์</button>
         </div>
 
-        <!-- เนื้อหาหมวดที่ 3: จัดการคีย์ -->
+        <!-- หมวดที่ 3: จัดการคีย์ -->
         <div id="manage-key" class="tab-content">
             <div class="tab-header">⚙️ จัดการคีย์ในระบบ</div>
             <div class="tab-desc">แก้ไขรายละเอียดและล็อกโดเมน</div>
@@ -255,6 +292,7 @@
     </div>
 
     <script>
+        // ระบบสลับหมวดหมู่
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
@@ -266,6 +304,35 @@
             document.getElementById(tabId).classList.add('active');
             btnElement.classList.add('active');
         }
+
+        // ระบบสุ่มสร้างคำว่า REALPOOH ลอยขึ้นเรื่อยๆ ตลอดเวลา
+        const bgContainer = document.getElementById('bgContainer');
+
+        function createFloatingWord() {
+            const word = document.createElement('div');
+            word.classList.add('floating-word', 'bubble-font');
+            word.innerText = 'REALPOOH';
+
+            const randomX = Math.random() * 90;
+            const randomSize = Math.floor(Math.random() * 25) + 30;
+            const randomDuration = Math.floor(Math.random() * 6) + 8;
+
+            word.style.left = randomX + 'vw';
+            word.style.fontSize = randomSize + 'px';
+            word.style.animationDuration = randomDuration + 's';
+
+            bgContainer.appendChild(word);
+
+            setTimeout(() => {
+                word.remove();
+            }, randomDuration * 1000);
+        }
+
+        for (let i = 0; i < 6; i++) {
+            setTimeout(createFloatingWord, i * 800);
+        }
+
+        setInterval(createFloatingWord, 1200);
     </script>
 
 </body>
