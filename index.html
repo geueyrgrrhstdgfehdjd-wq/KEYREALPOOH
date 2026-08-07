@@ -30,7 +30,7 @@
             letter-spacing: 3px;
         }
 
-        /* ----- Container สำหรับให้คำลอยขึ้นมาเรื่อยๆ ----- */
+        /* ----- Background Floating REALPOOH ----- */
         .bg-spawn-container {
             position: absolute;
             top: 0;
@@ -42,7 +42,6 @@
             overflow: hidden;
         }
 
-        /* ตัวหนังสือลอยขึ้นเรื่อยๆ */
         .floating-word {
             position: absolute;
             opacity: 0.28;
@@ -52,20 +51,10 @@
         }
 
         @keyframes floatUp {
-            0% {
-                transform: translateY(105vh) rotate(0deg) scale(0.8);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.28;
-            }
-            90% {
-                opacity: 0.28;
-            }
-            100% {
-                transform: translateY(-15vh) rotate(20deg) scale(1.1);
-                opacity: 0;
-            }
+            0% { transform: translateY(105vh) rotate(0deg) scale(0.8); opacity: 0; }
+            10% { opacity: 0.28; }
+            90% { opacity: 0.28; }
+            100% { transform: translateY(-15vh) rotate(20deg) scale(1.1); opacity: 0; }
         }
 
         /* ----- UI Box สีดำสนิท ----- */
@@ -97,17 +86,12 @@
             border-radius: 50%;
             border: 4px solid #ffffff;
             box-shadow: 0 6px 15px rgba(255,255,255,0.2);
-            /* แอนิเมชันหมุนเป็นวงกลมต่อเนื่อง */
             animation: rotateLego 8s linear infinite;
         }
 
         @keyframes rotateLego {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .brand-title {
@@ -117,7 +101,7 @@
             text-shadow: 2px 2px 0px #000;
         }
 
-        /* เมนูหมวดหมู่ ปุ่มใหญ่ 3 บรรทัด */
+        /* เมนูหมวดหมู่ ปุ่มใหญ่ 2 บรรทัด */
         .tab-menu-vertical { 
             display: flex; 
             flex-direction: column;
@@ -196,6 +180,13 @@
             font-family: 'Mali', cursive;
         }
 
+        input:disabled {
+            background: #27272a;
+            color: #71717a;
+            cursor: not-allowed;
+            border-color: #3f3f46;
+        }
+
         input:focus, select:focus {
             border-color: #ffffff;
         }
@@ -216,8 +207,57 @@
         .btn-white { background: #ffffff; color: #000000; }
         .btn-white:hover { background: #e4e4e7; transform: scale(1.02); }
 
-        .btn-danger { background: #ef4444; color: #ffffff; }
-        .btn-danger:hover { background: #dc2626; transform: scale(1.02); }
+        .btn-add { background: #3b82f6; color: #ffffff; }
+        .btn-add:hover { background: #2563eb; transform: scale(1.02); }
+
+        /* ผลลัพธ์แสดงคีย์ที่สร้างได้ */
+        .key-result-box {
+            display: none;
+            margin-top: 18px;
+            padding: 14px;
+            background: #09090b;
+            border: 2px dashed #22c55e;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .key-result-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #4ade80;
+            word-break: break-all;
+            margin-bottom: 8px;
+            user-select: all;
+        }
+
+        .btn-copy {
+            background: #22c55e;
+            color: #000000;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        .btn-copy:hover { background: #16a34a; }
+
+        /* กล่องแสดงรายการคีย์ในระบบ */
+        .key-list-box {
+            max-height: 160px;
+            overflow-y: auto;
+            background: #09090b;
+            border: 2px solid #27272a;
+            border-radius: 14px;
+            padding: 10px;
+            margin-top: 8px;
+        }
+
+        .key-item {
+            font-size: 0.85rem;
+            color: #38bdf8;
+            padding: 6px 8px;
+            border-bottom: 1px dashed #27272a;
+            word-break: break-all;
+        }
+        .key-item:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
@@ -234,14 +274,10 @@
 
         <div class="brand-title bubble-font">REALPOOH</div>
 
-        <!-- 3 หมวดหมู่ ปุ่มใหญ่เต็มจอ 3 บรรทัด -->
+        <!-- หมวดหมู่ ปุ่มใหญ่เต็มจอ เหลือ 2 บรรทัด -->
         <div class="tab-menu-vertical">
             <button class="tab-btn-large active" onclick="switchTab('use-key', this)">
                 <span>🔑 กดคีย์</span>
-                <span>➔</span>
-            </button>
-            <button class="tab-btn-large" onclick="switchTab('delete-key', this)">
-                <span>🗑️ ลบคีย์</span>
                 <span>➔</span>
             </button>
             <button class="tab-btn-large" onclick="switchTab('manage-key', this)">
@@ -250,62 +286,199 @@
             </button>
         </div>
 
-        <!-- หมวดที่ 1: กดคีย์ -->
+        <!-- หมวดที่ 1: กดคีย์ (สร้างคีย์ใหม่) -->
         <div id="use-key" class="tab-content active">
-            <div class="tab-header">🔑 กดใช้งานคีย์</div>
-            <div class="tab-desc">กรอกรหัสคีย์เพื่อเปิดใช้งานระบบ</div>
+            <div class="tab-header">🔑 สร้าง/รับคีย์ใช้งาน</div>
+            <div class="tab-desc">เลือกประเภทอายุใช้งานและระบุจำนวนวัน/เดือน/ปี</div>
+            
             <div class="form-group">
-                <label>API KEY</label>
-                <input type="text" placeholder="วางรหัสคีย์ที่นี่...">
-            </div>
-            <button class="btn btn-white">เปิดใช้งานคีย์</button>
-        </div>
-
-        <!-- หมวดที่ 2: ลบคีย์ -->
-        <div id="delete-key" class="tab-content">
-            <div class="tab-header">🗑️ ลบข้อมูลคีย์</div>
-            <div class="tab-desc">ระบุคีย์เพื่อถอนสิทธิ์จากระบบ</div>
-            <div class="form-group">
-                <label>API KEY ที่ต้องการลบ</label>
-                <input type="text" placeholder="ระบุรหัสคีย์...">
-            </div>
-            <button class="btn btn-danger">ยืนยันการลบคีย์</button>
-        </div>
-
-        <!-- หมวดที่ 3: จัดการคีย์ -->
-        <div id="manage-key" class="tab-content">
-            <div class="tab-header">⚙️ จัดการคีย์ในระบบ</div>
-            <div class="tab-desc">แก้ไขรายละเอียดและล็อกโดเมน</div>
-            <div class="form-group">
-                <label>เลือกคีย์</label>
-                <select>
-                    <option>KEY-REALPOOH-001 (Active)</option>
-                    <option>KEY-REALPOOH-002 (Expired)</option>
+                <label>เลือกระโยเวลา</label>
+                <select id="timeType" onchange="handleTimeTypeChange()">
+                    <option value="DAY">วัน (DAY)</option>
+                    <option value="MONTH">เดือน (MONTH)</option>
+                    <option value="YEAR">ปี (YEAR)</option>
+                    <option value="PERMANENT">ถาวร (PERMANENT)</option>
                 </select>
             </div>
+
             <div class="form-group">
-                <label>ผูกโดเมน (Domain Lock)</label>
-                <input type="text" value="realpooh.com">
+                <label id="amountLabel">จำนวน (สูงสุด 999)</label>
+                <input type="number" id="timeAmount" min="1" max="999" value="1" placeholder="กรอกจำนวน 1-999...">
             </div>
-            <button class="btn btn-white">บันทึกการเปลี่ยนแปลง</button>
+
+            <button class="btn btn-white" onclick="generateKey()">รับคีย์ใช้งาน</button>
+
+            <!-- กล่องแสดงคีย์ที่กดรับ -->
+            <div id="keyResultBox" class="key-result-box">
+                <div style="font-size: 0.85rem; color: #a1a1aa; margin-bottom: 4px;">คีย์ของคุณคือ:</div>
+                <div id="generatedKey" class="key-result-text">VIP-1DAY-X89A1K</div>
+                <button class="btn btn-copy" onclick="copyKey()">📋 คัดลอกคีย์</button>
+            </div>
+        </div>
+
+        <!-- หมวดที่ 2: จัดการคีย์ (จัดการคีย์ทั้งหมดของทุกคน) -->
+        <div id="manage-key" class="tab-content">
+            <div class="tab-header">⚙️ จัดการคีย์ทั้งหมดในระบบ</div>
+            <div class="tab-desc">เพิ่มเวลาให้คีย์ทุกคน และสุ่มรหัสตัวหลังใหม่</div>
+
+            <div class="form-group">
+                <label>เพิ่มเวลาให้คีย์ทั้งหมด</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="addAmount" min="1" max="999" value="1" placeholder="จำนวน...">
+                    <select id="addType">
+                        <option value="DAY">วัน</option>
+                        <option value="MONTH">เดือน</option>
+                        <option value="YEAR">ปี</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn btn-add" onclick="addTimeToAllKeys()">⚡ เพิ่มเวลา + สุ่มรหัสหลังคีย์ทั้งหมด</button>
+
+            <div class="form-group" style="margin-top: 18px;">
+                <label>รายการคีย์ทั้งหมดในระบบ (<span id="keyCount">0</span> คีย์)</label>
+                <div id="allKeysContainer" class="key-list-box">
+                    <div style="color: #71717a; text-align: center; font-size: 0.85rem; padding: 10px;">ยังไม่มีคีย์ในระบบ</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        // ฐานข้อมูลคีย์ทั้งหมดในระบบ (จัดเก็บใน LocalStorage เพื่อใช้งานร่วมกันได้ตลอดเวลา)
+        let globalKeys = JSON.parse(localStorage.getItem('REALPOOH_GLOBAL_KEYS')) || [];
+
+        // ฟังก์ชันอัปเดตรูปร่างหน้าตาของรายการคีย์
+        function renderKeyList() {
+            const container = document.getElementById('allKeysContainer');
+            const countLabel = document.getElementById('keyCount');
+            countLabel.innerText = globalKeys.length;
+
+            if (globalKeys.length === 0) {
+                container.innerHTML = `<div style="color: #71717a; text-align: center; font-size: 0.85rem; padding: 10px;">ยังไม่มีคีย์ในระบบ</div>`;
+                return;
+            }
+
+            container.innerHTML = globalKeys.map(k => {
+                const timeText = k.type === 'PERMANENT' ? 'PERMANENT' : `${k.amount}${k.type}`;
+                return `<div class="key-item">🔑 VIP-${timeText}-${k.code}</div>`;
+            }).join('');
+        }
+
         // ระบบสลับหมวดหมู่
         function switchTab(tabId, btnElement) {
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-btn-large').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab-btn-large').forEach(btn => btn.classList.remove('active'));
 
             document.getElementById(tabId).classList.add('active');
             btnElement.classList.add('active');
+
+            if (tabId === 'manage-key') {
+                renderKeyList();
+            }
         }
 
-        // ระบบสุ่มสร้างคำว่า REALPOOH ลอยขึ้นเรื่อยๆ ตลอดเวลา
+        // ระบบควบคุมช่องใส่จำนวน
+        function handleTimeTypeChange() {
+            const timeType = document.getElementById('timeType').value;
+            const timeAmountInput = document.getElementById('timeAmount');
+
+            if (timeType === 'PERMANENT') {
+                timeAmountInput.disabled = true;
+                timeAmountInput.value = '';
+                timeAmountInput.placeholder = 'ถาวร (ไม่ต้องระบุจำนวน)';
+            } else {
+                timeAmountInput.disabled = false;
+                timeAmountInput.value = '1';
+                timeAmountInput.placeholder = 'กรอกจำนวน 1-999...';
+            }
+        }
+
+        // ฟังก์ชันสุ่มรหัสตัวอักษรด้านหลัง (ความยาว 1-10 ตัว)
+        function getRandomCode() {
+            const randomLength = Math.floor(Math.random() * 10) + 1;
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < randomLength; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        // ระบบสร้างคีย์ใหม่ในหน้า "กดคีย์"
+        function generateKey() {
+            const timeType = document.getElementById('timeType').value;
+            const timeAmountInput = document.getElementById('timeAmount');
+            let amount = parseInt(timeAmountInput.value);
+
+            if (timeType !== 'PERMANENT') {
+                if (isNaN(amount) || amount < 1) amount = 1;
+                if (amount > 999) amount = 999;
+                timeAmountInput.value = amount;
+            }
+
+            const randomCode = getRandomCode();
+
+            // บันทึกลงฐานข้อมูลกลาง
+            const newKeyObj = {
+                id: Date.now(),
+                type: timeType,
+                amount: timeType === 'PERMANENT' ? 0 : amount,
+                code: randomCode
+            };
+
+            globalKeys.push(newKeyObj);
+            localStorage.setItem('REALPOOH_GLOBAL_KEYS', JSON.stringify(globalKeys));
+
+            const timePrefix = timeType === 'PERMANENT' ? 'PERMANENT' : `${amount}${timeType}`;
+            const finalKey = `VIP-${timePrefix}-${randomCode}`;
+
+            document.getElementById('generatedKey').innerText = finalKey;
+            document.getElementById('keyResultBox').style.display = 'block';
+        }
+
+        // ระบบคัดลอกคีย์
+        function copyKey() {
+            const keyText = document.getElementById('generatedKey').innerText;
+            navigator.clipboard.writeText(keyText).then(() => {
+                alert('คัดลอกคีย์เรียบร้อยแล้ว: ' + keyText);
+            });
+        }
+
+        // ระบบเพิ่มเวลาคีย์ทั้งหมด + สุ่มรหัสหลังคีย์ใหม่
+        function addTimeToAllKeys() {
+            if (globalKeys.length === 0) {
+                alert('ยังไม่มีคีย์ในระบบให้เพิ่มเวลา!');
+                return;
+            }
+
+            const addAmount = parseInt(document.getElementById('addAmount').value) || 1;
+            const addType = document.getElementById('addType').value;
+
+            // วนลูปอัปเดตเวลาและสุ่มรหัสตัวหลังใหม่ให้ทุกคีย์
+            globalKeys = globalKeys.map(k => {
+                let newAmount = k.amount;
+
+                // ถ้าไม่ใช่คีย์ถาวร และประเภทเวลาตรงกัน ให้บวกเวลาเพิ่ม (สูงสุดไม่เกิน 999)
+                if (k.type !== 'PERMANENT') {
+                    if (k.type === addType) {
+                        newAmount = Math.min(999, k.amount + addAmount);
+                    }
+                }
+
+                return {
+                    ...k,
+                    amount: newAmount,
+                    code: getRandomCode() // สุ่มตัวข้างหลังใหม่ทุกครั้งที่กดเพิ่มเวลา
+                };
+            });
+
+            localStorage.setItem('REALPOOH_GLOBAL_KEYS', JSON.stringify(globalKeys));
+            renderKeyList();
+            alert(`เพิ่มเวลา ${addAmount} ${addType} ให้คีย์ทั้งหมดเรียบร้อย และทำการสุ่มรหัสหลังคีย์ใหม่แล้ว!`);
+        }
+
+        // ระบบสุ่มสร้างคำว่า REALPOOH ลอยขึ้นเรื่อยๆ
         const bgContainer = document.getElementById('bgContainer');
 
         function createFloatingWord() {
@@ -333,6 +506,9 @@
         }
 
         setInterval(createFloatingWord, 1200);
+
+        // โหลดรายการคีย์เริ่มต้น
+        renderKeyList();
     </script>
 
 </body>
