@@ -208,11 +208,19 @@
         .btn-white { background: #ffffff; color: #000000; }
         .btn-white:hover { background: #e4e4e7; transform: scale(1.02); }
 
-        .btn-blue { background: #3b82f6; color: #ffffff; }
-        .btn-blue:hover { background: #2563eb; transform: scale(1.02); }
-
-        .btn-green { background: #22c55e; color: #000000; margin-top: 12px; }
-        .btn-green:hover { background: #16a34a; transform: scale(1.02); }
+        /* ปุ่มเปิดเว็บขนาดใหญ่ */
+        .btn-go-web { 
+            background: #3b82f6; 
+            color: #ffffff; 
+            padding: 20px;
+            font-size: 1.3rem;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-go-web:hover { background: #2563eb; transform: scale(1.03); }
 
         /* ผลลัพธ์แสดงคีย์ที่สร้างได้ */
         .key-result-box {
@@ -242,55 +250,6 @@
             margin-top: 4px;
         }
         .btn-copy:hover { background: #16a34a; }
-
-        /* กล่องรายการคีย์ทั้งหมด */
-        .key-list-box {
-            max-height: 180px;
-            overflow-y: auto;
-            background: #09090b;
-            border: 2px solid #27272a;
-            border-radius: 14px;
-            padding: 10px;
-            margin-top: 8px;
-        }
-
-        .key-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            color: #38bdf8;
-            padding: 8px;
-            border-bottom: 1px dashed #27272a;
-            word-break: break-all;
-        }
-        .key-item:last-child { border-bottom: none; }
-
-        .btn-delete-small {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            margin-left: 6px;
-            white-space: nowrap;
-        }
-        .btn-delete-small:hover { background: #dc2626; }
-
-        /* กล่องแสดงผลการยืนยันคีย์ */
-        .verify-status {
-            display: none;
-            margin-top: 12px;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            text-align: center;
-        }
-        .status-success { background: #14532d; color: #4ade80; border: 1px solid #22c55e; }
-        .status-fail { background: #451a1a; color: #f87171; border: 1px solid #ef4444; }
     </style>
 </head>
 <body>
@@ -313,8 +272,8 @@
                 <span>🔑 สร้าง/รับคีย์</span>
                 <span>➔</span>
             </button>
-            <button class="tab-btn-large" onclick="switchTab('verify-key', this)">
-                <span>🌐 เว็บยืนยันคีย์ทั้งหมด</span>
+            <button class="tab-btn-large" onclick="switchTab('go-web', this)">
+                <span>🌐 เข้าสู่เว็บไซต์หลัก</span>
                 <span>➔</span>
             </button>
         </div>
@@ -349,37 +308,23 @@
             </div>
         </div>
 
-        <!-- หมวดที่ 2: เว็บยืนยันคีย์ทั้งหมด -->
-        <div id="verify-key" class="tab-content">
-            <div class="tab-header">🌐 ยืนยันคีย์เพื่อเข้าสู่เว็บไซต์</div>
-            <div class="tab-desc">ป้อนคีย์เพื่อยืนยันสิทธิ์เข้าใช้งานระบบ</div>
+        <!-- หมวดที่ 2: กดเข้าสู่เว็บที่กำหนด -->
+        <div id="go-web" class="tab-content">
+            <div class="tab-header">🌐 ยินดีต้อนรับสู่ REALPOOH</div>
+            <div class="tab-desc">กดปุ่มด้านล่างเพื่อเดินทางไปยังเว็บไซต์หลักของเรา</div>
 
-            <div class="form-group">
-                <label>ป้อนคีย์ที่ต้องการยืนยัน</label>
-                <input type="text" id="inputVerifyKey" placeholder="วางรหัสคีย์ที่นี่ (เช่น VIP-1DAY-XXX)...">
-            </div>
-
-            <button class="btn btn-blue" onclick="verifyKey()">🔍 ตรวจสอบยืนยันคีย์</button>
-
-            <!-- แสดงสถานะการยืนยัน + ปุ่มไปยังเว็บที่กำหนด -->
-            <div id="verifyStatusBox" class="verify-status"></div>
-
-            <div class="form-group" style="margin-top: 20px;">
-                <label>รายการคีย์ทั้งหมดในระบบ (<span id="keyCount">0</span>)</label>
-                <div id="allKeysContainer" class="key-list-box">
-                    <div style="color: #71717a; text-align: center; font-size: 0.85rem; padding: 10px;">ยังไม่มีคีย์ในระบบ</div>
-                </div>
+            <!-- 📌 เปลี่ยน URL เว็บไซต์หลักของคุณที่นี่ครับ! -->
+            <button class="btn btn-go-web" onclick="window.open('https://google.com', '_blank')">
+                <span>🚀 เข้าสู่เว็บไซต์หลัก</span>
+            </button>
+            
+            <div style="text-align: center; color: #71717a; font-size: 0.8rem; margin-top: 15px;">
+                (คุณสามารถแก้ไขลิงก์ปลายทางในโค้ดได้)
             </div>
         </div>
     </div>
 
     <script>
-        // 📌 สามารถเปลี่ยน URL เว็บไซต์ปลายทางที่คุณต้องการตรงนี้ได้เลยครับ!
-        const targetURL = "https://google.com";
-
-        // ฐานข้อมูลจัดเก็บคีย์
-        let globalKeys = JSON.parse(localStorage.getItem('REALPOOH_GLOBAL_KEYS')) || [];
-
         // ระบบสลับหมวดหมู่
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -387,10 +332,6 @@
 
             document.getElementById(tabId).classList.add('active');
             btnElement.classList.add('active');
-
-            if (tabId === 'verify-key') {
-                renderKeyList();
-            }
         }
 
         // ระบบควบคุมช่องใส่จำนวน
@@ -436,10 +377,6 @@
             const timePrefix = timeType === 'PERMANENT' ? 'PERMANENT' : `${amount}${timeType}`;
             const finalKey = `VIP-${timePrefix}-${randomCode}`;
 
-            // บันทึกคีย์เข้าฐานข้อมูล
-            globalKeys.push(finalKey);
-            localStorage.setItem('REALPOOH_GLOBAL_KEYS', JSON.stringify(globalKeys));
-
             document.getElementById('generatedKey').innerText = finalKey;
             document.getElementById('keyResultBox').style.display = 'block';
         }
@@ -450,62 +387,6 @@
             navigator.clipboard.writeText(keyText).then(() => {
                 alert('คัดลอกคีย์เรียบร้อยแล้ว: ' + keyText);
             });
-        }
-
-        // ระบบยืนยันตรวจสอบคีย์
-        function verifyKey() {
-            const inputKey = document.getElementById('inputVerifyKey').value.trim();
-            const statusBox = document.getElementById('verifyStatusBox');
-
-            if (!inputKey) {
-                alert('กรุณากรอกหรือวางคีย์ที่ต้องการตรวจสอบ!');
-                return;
-            }
-
-            if (globalKeys.includes(inputKey)) {
-                statusBox.className = 'verify-status status-success';
-                statusBox.innerHTML = `
-                    <div>✅ ยืนยันคีย์ถูกต้องสำเร็จ!</div>
-                    <button class="btn btn-green" onclick="goToTargetWebsite()">🚀 เข้าสู่เว็บไซต์ที่กำหนด</button>
-                `;
-            } else {
-                statusBox.className = 'verify-status status-fail';
-                statusBox.innerHTML = `❌ ยืนยันไม่สำเร็จ! ไม่พบข้อมูลคีย์นี้ในระบบ`;
-            }
-            statusBox.style.display = 'block';
-        }
-
-        // ฟังก์ชันเปิดไปหน้าเว็บที่กำหนด
-        function goToTargetWebsite() {
-            window.open(targetURL, '_blank');
-        }
-
-        // แสดงรายการคีย์ทั้งหมด
-        function renderKeyList() {
-            const container = document.getElementById('allKeysContainer');
-            const countLabel = document.getElementById('keyCount');
-            countLabel.innerText = globalKeys.length;
-
-            if (globalKeys.length === 0) {
-                container.innerHTML = `<div style="color: #71717a; text-align: center; font-size: 0.85rem; padding: 10px;">ยังไม่มีคีย์ในระบบ</div>`;
-                return;
-            }
-
-            container.innerHTML = globalKeys.map((k, index) => `
-                <div class="key-item">
-                    <span>🔑 ${k}</span>
-                    <button class="btn-delete-small" onclick="deleteKey(${index})">ลบ</button>
-                </div>
-            `).join('');
-        }
-
-        // ระบบลบคีย์รายตัว
-        function deleteKey(index) {
-            if (confirm(`คุณต้องการลบคีย์ "${globalKeys[index]}" ออกจากระบบใช่หรือไม่?`)) {
-                globalKeys.splice(index, 1);
-                localStorage.setItem('REALPOOH_GLOBAL_KEYS', JSON.stringify(globalKeys));
-                renderKeyList();
-            }
         }
 
         // ระบบสุ่มสร้างคำว่า REALPOOH ลอยขึ้นเรื่อยๆ
