@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Key Generator & Verification System</title>
+  <title>Get Access Key - ระบบรับคีย์เข้าใช้งาน</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -13,160 +13,53 @@
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between p-4 sm:p-6">
 
   <!-- Header -->
-  <header class="max-w-2xl mx-auto w-full text-center my-6">
-    <div class="inline-block bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 px-4 py-1.5 rounded-full text-xs font-semibold mb-3">
+  <header class="max-w-md mx-auto w-full text-center my-auto pt-8">
+    <div class="inline-block bg-amber-500/10 border border-amber-500/20 text-amber-400 px-4 py-1.5 rounded-full text-xs font-semibold mb-3">
       🔑 Access Key System
     </div>
     <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
-      ระบบสร้างและตรวจสอบคีย์
+      รับคีย์เข้าใช้งาน
     </h1>
     <p class="text-slate-400 text-sm">
-      กดสุ่มรับคีย์เข้าใช้งาน หรือนำคีย์ที่มีมาตรวจสอบสถานะการใช้งาน
+      กดปุ่มด้านล่างเพื่อไปยังหน้าทำภารกิจและรับคีย์ของคุณ
     </p>
   </header>
 
-  <main class="max-w-2xl mx-auto w-full space-y-6 my-auto">
-
-    <!-- Card 1: สุ่มรับคีย์ (Generate Key) -->
-    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
-      <div class="flex items-center gap-3 mb-4">
-        <span class="text-2xl">🎲</span>
-        <div>
-          <h2 class="text-lg font-bold text-white">รับคีย์เข้าใช้งาน (Generate Key)</h2>
-          <p class="text-xs text-slate-400">กดปุ่มเพื่อสุ่มสร้างคีย์รหัสใหม่สำหรับใช้งาน</p>
-        </div>
+  <!-- Main Card -->
+  <main class="max-w-md mx-auto w-full space-y-6 my-auto">
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-sm text-center">
+      
+      <div class="w-16 h-16 bg-indigo-600/10 border border-indigo-500/30 text-indigo-400 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+        🚀
       </div>
 
-      <!-- Display Key Box -->
-      <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 text-center mb-4 relative group">
-        <span class="text-[10px] text-slate-500 uppercase tracking-widest block mb-1">Your Generated Key</span>
-        <div id="keyDisplay" class="font-mono text-xl sm:text-2xl font-bold text-amber-400 tracking-wider break-all">
-          CLICK GENERATE
-        </div>
+      <h2 class="text-xl font-bold text-white mb-2">ทำภารกิจเพื่อรับคีย์</h2>
+      <p class="text-xs text-slate-400 mb-6 leading-relaxed">
+        เมื่อกดปุ่ม ระบบจะพายังหน้าทำภารกิจ <br class="hidden sm:inline">ทำตามขั้นตอนจนจบเพื่อรับรหัสคีย์เข้าใช้งาน
+      </p>
+
+      <!-- ปุ่มไปทำภารกิจ (เปลี่ยนลิงก์ตรง href) -->
+      <a href="https://linkvertise.com/your-link-here" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 active:scale-95 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-600/25 transition duration-200 flex items-center justify-center gap-2 text-base">
+        <span>✨</span>
+        <span>กดที่นี่เพื่อไปทำภารกิจรับคีย์</span>
+      </a>
+
+      <!-- Notice -->
+      <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-center gap-2 text-xs text-slate-500">
+        <span>🛡️</span>
+        <span>ระบบปลอดภัย ปลอดมัลแวร์ 100%</span>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button onclick="generateRandomKey()" 
-                class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-semibold py-3 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20">
-          <span>✨</span>
-          <span>สุ่มสร้างคีย์ใหม่</span>
-        </button>
-
-        <button onclick="copyGeneratedKey()" id="copyBtn" 
-                class="bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 font-semibold py-3 px-4 rounded-xl border border-slate-700 transition duration-150 flex items-center justify-center gap-2">
-          <span>📋</span>
-          <span id="copyBtnText">คัดลอกคีย์</span>
-        </button>
-      </div>
     </section>
-
-    <!-- Card 2: ตรวจสอบคีย์ (Verify Key) -->
-    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
-      <div class="flex items-center gap-3 mb-4">
-        <span class="text-2xl">🔍</span>
-        <div>
-          <h2 class="text-lg font-bold text-white">ตรวจสอบคีย์ (Key Verifier)</h2>
-          <p class="text-xs text-slate-400">วางคีย์ของคุณด้านล่างเพื่อเช็กความถูกต้อง</p>
-        </div>
-      </div>
-
-      <div class="space-y-3">
-        <input type="text" id="verifyInput" placeholder="วางคีย์ที่นี่ (เช่น KEY-XXXX-XXXX-XXXX)" 
-               class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-center text-amber-300 font-mono focus:outline-none focus:border-indigo-500 transition">
-
-        <button onclick="checkKey()" 
-                class="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-semibold py-3 px-4 rounded-xl transition duration-150 shadow-lg shadow-emerald-600/20">
-          ตรวจสอบคีย์ทันที
-        </button>
-      </div>
-
-      <!-- Status Alert Message -->
-      <div id="statusAlert" class="hidden mt-4 p-3.5 rounded-xl text-center text-sm font-medium border"></div>
-    </section>
-
   </main>
 
   <!-- Footer -->
   <footer class="text-center text-xs text-slate-600 my-4">
-    Key Generator System &bull; Powered by HTML & Tailwind CSS
+    Key Distribution System &bull; Powered by HTML & Tailwind CSS
   </footer>
 
-  <script>
-    let lastGeneratedKey = "";
-
-    // ฟังก์ชันสุ่มคีย์ รูปแบบ KEY-XXXX-XXXX-XXXX
-    function generateRandomKey() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      const segment = () => {
-        let str = '';
-        for (let i = 0; i < 4; i++) str += chars.charAt(Math.floor(Math.random() * chars.length));
-        return str;
-      };
-
-      lastGeneratedKey = `KEY-${segment()}-${segment()}-${segment()}`;
-      
-      const display = document.getElementById('keyDisplay');
-      display.innerText = lastGeneratedKey;
-      display.classList.remove('text-amber-400');
-      display.classList.add('text-emerald-400');
-
-      // ล้างแจ้งเตือนหน้าตรวจสอบ
-      document.getElementById('statusAlert').classList.add('hidden');
-    }
-
-    // ฟังก์ชันคัดลอกคีย์
-    function copyGeneratedKey() {
-      if (!lastGeneratedKey) {
-        alert('กรุณากดสุ่มสร้างคีย์ก่อนครับ');
-        return;
-      }
-
-      navigator.clipboard.writeText(lastGeneratedKey);
-      const copyBtnText = document.getElementById('copyBtnText');
-      copyBtnText.innerText = 'คัดลอกสำเร็จ!';
-      
-      setTimeout(() => {
-        copyBtnText.innerText = 'คัดลอกคีย์';
-      }, 2000);
-    }
-
-    // ฟังก์ชันตรวจสอบคีย์
-    function checkKey() {
-      const inputVal = document.getElementById('verifyInput').value.trim();
-      const statusAlert = document.getElementById('statusAlert');
-
-      if (!inputVal) {
-        showAlert('⚠️ กรุณากรอกคอร์ด/คีย์ก่อนกดตรวจสอบ', 'amber');
-        return;
-      }
-
-      // ตรวจสอบโครงสร้างคีย์ KEY-XXXX-XXXX-XXXX
-      const keyPattern = /^KEY-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/i;
-
-      if (keyPattern.test(inputVal)) {
-        showAlert('✅ คีย์ถูกต้อง! สามารถใช้งานในระบบได้', 'emerald');
-      } else {
-        showAlert('❌ คีย์ไม่ถูกต้อง หรือรูปแบบคีย์ไม่สมบูรณ์', 'rose');
-      }
-    }
-
-    function showAlert(message, color) {
-      const alert = document.getElementById('statusAlert');
-      alert.classList.remove('hidden', 'bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-400',
-                             'bg-rose-500/10', 'border-rose-500/30', 'text-rose-400',
-                             'bg-amber-500/10', 'border-amber-500/30', 'text-amber-400');
-
-      if (color === 'emerald') {
-        alert.classList.add('bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-400');
-      } else if (color === 'rose') {
-        alert.classList.add('bg-rose-500/10', 'border-rose-500/30', 'text-rose-400');
-      } else {
-        alert.classList.add('bg-amber-500/10', 'border-amber-500/30', 'text-amber-400');
-      }
-
-      alert.innerText = message;
-    }
-  </script>
 </body>
 </html>
