@@ -1,423 +1,196 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REALPOOH - KEY MANAGEMENT</title>
-    <!-- ฟอนต์การ์ตูนน่ารัก นุ่มฟู (Mali & Gaegu) -->
-    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Mali:wght@700&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Mali', cursive, sans-serif; }
-        
-        body { 
-            background-color: #ffffff; 
-            min-height: 100vh;
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* ----- ฟอนต์นูนการ์ตูนน่ารักดุ๊กดิ๊ก ----- */
-        .bubble-font {
-            font-family: 'Gaegu', 'Mali', cursive, sans-serif;
-            font-weight: 700;
-            color: #ffffff;
-            -webkit-text-stroke: 4px #000000;
-            filter: drop-shadow(4px 5px 0px #000000);
-            letter-spacing: 3px;
-        }
-
-        /* ----- Background Floating REALPOOH ----- */
-        .bg-spawn-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .floating-word {
-            position: absolute;
-            opacity: 0.28;
-            user-select: none;
-            white-space: nowrap;
-            animation: floatUp 10s linear forwards;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(105vh) rotate(0deg) scale(0.8); opacity: 0; }
-            10% { opacity: 0.28; }
-            90% { opacity: 0.28; }
-            100% { transform: translateY(-15vh) rotate(20deg) scale(1.1); opacity: 0; }
-        }
-
-        /* ----- UI Box สีดำสนิท ----- */
-        .container { 
-            position: relative;
-            z-index: 10;
-            width: 100%; 
-            max-width: 480px; 
-            background: #000000; 
-            padding: 32px 24px; 
-            border-radius: 28px; 
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-            color: #ffffff;
-            text-align: center;
-        }
-
-        /* ----- รูปภาพเลโก้หมุนเป็นวงกลม 🔄 ----- */
-        .lego-spin-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .lego-img {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid #ffffff;
-            box-shadow: 0 6px 15px rgba(255,255,255,0.2);
-            animation: rotateLego 8s linear infinite;
-        }
-
-        @keyframes rotateLego {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .brand-title {
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 24px;
-            text-shadow: 2px 2px 0px #000;
-        }
-
-        /* เมนูหมวดหมู่ ปุ่มใหญ่ 2 บรรทัด */
-        .tab-menu-vertical { 
-            display: flex; 
-            flex-direction: column;
-            gap: 12px; 
-            margin-bottom: 24px; 
-            width: 100%;
-        }
-        
-        .tab-btn-large { 
-            width: 100%;
-            padding: 16px 20px; 
-            border: 3px solid #27272a; 
-            background: #18181b; 
-            color: #a1a1aa; 
-            font-weight: 700; 
-            font-size: 1.15rem;
-            cursor: pointer; 
-            border-radius: 18px; 
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .tab-btn-large:hover { 
-            border-color: #ffffff;
-            color: #ffffff;
-            background: #27272a;
-            transform: translateY(-2px);
-        }
-
-        .tab-btn-large.active { 
-            background: #ffffff; 
-            color: #000000; 
-            border-color: #ffffff;
-            box-shadow: 0 6px 20px rgba(255,255,255,0.25);
-        }
-
-        /* พื้นที่เนื้อหา */
-        .tab-content { 
-            display: none;
-            background: #18181b;
-            padding: 24px;
-            border-radius: 20px;
-            border: 2px solid #27272a;
-            text-align: left;
-        }
-
-        .tab-content.active { display: block; }
-
-        .tab-header {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: #ffffff;
-        }
-
-        .tab-desc {
-            font-size: 0.9rem;
-            color: #a1a1aa;
-            margin-bottom: 20px;
-        }
-
-        /* Form Controls */
-        .form-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #a1a1aa; font-weight: 700; }
-        
-        input, select { 
-            width: 100%; 
-            padding: 14px; 
-            border-radius: 14px; 
-            border: 2px solid #27272a; 
-            background: #09090b; 
-            color: #ffffff; 
-            font-size: 1rem; 
-            outline: none;
-            font-family: 'Mali', cursive;
-        }
-
-        input:disabled {
-            background: #27272a;
-            color: #71717a;
-            cursor: not-allowed;
-            border-color: #3f3f46;
-        }
-
-        input:focus, select:focus {
-            border-color: #ffffff;
-        }
-
-        .btn { 
-            width: 100%; 
-            padding: 14px; 
-            border: none; 
-            border-radius: 14px; 
-            font-weight: 700; 
-            font-size: 1.1rem;
-            cursor: pointer; 
-            transition: 0.2s; 
-            margin-top: 10px;
-            font-family: 'Mali', cursive;
-        }
-
-        .btn-white { background: #ffffff; color: #000000; }
-        .btn-white:hover { background: #e4e4e7; transform: scale(1.02); }
-
-        /* ปุ่มเปิดเว็บขนาดใหญ่ */
-        .btn-go-web { 
-            background: #3b82f6; 
-            color: #ffffff; 
-            padding: 20px;
-            font-size: 1.3rem;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .btn-go-web:hover { background: #2563eb; transform: scale(1.03); }
-
-        /* ผลลัพธ์แสดงคีย์ที่สร้างได้ */
-        .key-result-box {
-            display: none;
-            margin-top: 18px;
-            padding: 14px;
-            background: #09090b;
-            border: 2px dashed #22c55e;
-            border-radius: 14px;
-            text-align: center;
-        }
-
-        .key-result-text {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #4ade80;
-            word-break: break-all;
-            margin-bottom: 8px;
-            user-select: all;
-        }
-
-        .btn-copy {
-            background: #22c55e;
-            color: #000000;
-            padding: 8px 16px;
-            font-size: 0.9rem;
-            margin-top: 4px;
-        }
-        .btn-copy:hover { background: #16a34a; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Key Finder & Transposer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style> body { font-family: 'Kanit', sans-serif; } </style>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 min-h-screen pb-12">
 
-    <!-- พื้นหลังสำหรับปล่อยคำว่า REALPOOH ลอยขึ้นมาตลอดเวลา -->
-    <div class="bg-spawn-container" id="bgContainer"></div>
+  <!-- Modal / Key Gate System -->
+  <div id="keyModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center">
+      <div class="text-4xl mb-3">🔐</div>
+      <h2 class="text-2xl font-bold text-indigo-400 mb-2">ต้องใช้คีย์เพื่อเข้าใช้งาน</h2>
+      <p class="text-slate-400 text-sm mb-6">กดปุ่มด้านล่างเพื่อไปทำภารกิจรับคีย์สุ่ม แล้วนำคีย์มากรอกเพื่อปลดล็อก</p>
 
-    <!-- UI หลักสีดำ -->
-    <div class="container">
-        <!-- เลโก้หมุน 🔄 ด้านบน -->
-        <div class="lego-spin-wrapper">
-            <img class="lego-img" src="https://cdn.discordapp.com/attachments/1533053333546336346/1535327399540031548/IMG_6479.jpg?ex=6a775c91&is=6a760b11&hm=a0723cd91b4b17f61ddaedf1e8c704c9448fdca17541a6fc393e5c370d40a9d6&" alt="Lego Image">
-        </div>
+      <!-- Linkvertise Target Link -->
+      <a href="https://linkvertise.com/your-link-here" target="_blank" rel="noopener noreferrer" 
+         class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition mb-6 flex items-center justify-center gap-2">
+        <span>🚀</span> <span>กดที่นี่เพื่อรับคีย์ (Linkvertise)</span>
+      </a>
 
-        <div class="brand-title bubble-font">REALPOOH</div>
-
-        <!-- เมนูหมวดหมู่ -->
-        <div class="tab-menu-vertical">
-            <button class="tab-btn-large active" onclick="switchTab('create-key', this)">
-                <span>🔑 สร้าง/รับคีย์</span>
-                <span>➔</span>
-            </button>
-            <button class="tab-btn-large" onclick="switchTab('go-web', this)">
-                <span>🌐 เข้าสู่เว็บไซต์หลัก</span>
-                <span>➔</span>
-            </button>
-        </div>
-
-        <!-- หมวดที่ 1: สร้าง/รับคีย์ -->
-        <div id="create-key" class="tab-content active">
-            <div class="tab-header">🔑 สร้าง/รับคีย์ใช้งาน</div>
-            <div class="tab-desc">เลือกประเภทอายุใช้งานและระบุจำนวนวัน/เดือน/ปี</div>
-            
-            <div class="form-group">
-                <label>เลือกระยะเวลา</label>
-                <select id="timeType" onchange="handleTimeTypeChange()">
-                    <option value="DAY">วัน (DAY)</option>
-                    <option value="MONTH">เดือน (MONTH)</option>
-                    <option value="YEAR">ปี (YEAR)</option>
-                    <option value="PERMANENT">ถาวร (PERMANENT)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label id="amountLabel">จำนวน (สูงสุด 999)</label>
-                <input type="number" id="timeAmount" min="1" max="999" value="1" placeholder="กรอกจำนวน 1-999...">
-            </div>
-
-            <button class="btn btn-white" onclick="generateKey()">รับคีย์ใช้งาน</button>
-
-            <!-- กล่องแสดงคีย์ที่กดรับ -->
-            <div id="keyResultBox" class="key-result-box">
-                <div style="font-size: 0.85rem; color: #a1a1aa; margin-bottom: 4px;">คีย์ของคุณคือ:</div>
-                <div id="generatedKey" class="key-result-text">VIP-1DAY-X89A1K</div>
-                <button class="btn btn-copy" onclick="copyKey()">📋 คัดลอกคีย์</button>
-            </div>
-        </div>
-
-        <!-- หมวดที่ 2: กดเข้าสู่เว็บที่กำหนด -->
-        <div id="go-web" class="tab-content">
-            <div class="tab-header">🌐 ยินดีต้อนรับสู่ REALPOOH</div>
-            <div class="tab-desc">กดปุ่มด้านล่างเพื่อเดินทางไปยังเว็บไซต์หลักของเรา</div>
-
-            <!-- 📌 เปลี่ยน URL เว็บไซต์หลักของคุณที่นี่ครับ! -->
-            <button class="btn btn-go-web" onclick="window.open('https://google.com', '_blank')">
-                <span>🚀 เข้าสู่เว็บไซต์หลัก</span>
-            </button>
-            
-            <div style="text-align: center; color: #71717a; font-size: 0.8rem; margin-top: 15px;">
-                (คุณสามารถแก้ไขลิงก์ปลายทางในโค้ดได้)
-            </div>
-        </div>
+      <div class="space-y-3">
+        <input type="text" id="accessKeyInput" placeholder="กรอกคีย์ที่นี่ (เช่น KEY-XXXX-XXXX)" 
+               class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-center text-amber-300 font-mono focus:outline-none focus:border-indigo-500">
+        
+        <button onclick="verifyKey()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition">
+          ปลดล็อกเข้าใช้งาน
+        </button>
+      </div>
+      <p id="keyError" class="text-rose-400 text-xs mt-3 hidden">❌ คีย์ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง</p>
     </div>
+  </div>
 
-    <script>
-        // ระบบสลับหมวดหมู่
-        function switchTab(tabId, btnElement) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn-large').forEach(b => b.classList.remove('active'));
+  <!-- Header -->
+  <header class="bg-slate-800 border-b border-slate-700 py-6 mb-8 shadow-lg">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-indigo-400">🎵 Song Key Finder & Transposer</h1>
+        <p class="text-slate-400 text-xs">เครื่องมือค้นหาคีย์เพลงและย้ายคีย์คอร์ด</p>
+      </div>
+      <button onclick="lockSystem()" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-1.5 rounded-lg">
+        🔒 ล็อกระบบ
+      </button>
+    </div>
+  </header>
 
-            document.getElementById(tabId).classList.add('active');
-            btnElement.classList.add('active');
-        }
+  <main class="max-w-4xl mx-auto px-4 space-y-8">
+    <!-- Section 1: Key Finder -->
+    <section class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-md">
+      <h2 class="text-xl font-semibold text-indigo-300 mb-4 flex items-center gap-2">
+        <span>🔍</span> ค้นหาคีย์จากกลุ่มคอร์ด (Key Finder)
+      </h2>
+      <p class="text-slate-400 text-sm mb-3">พิมพ์คอร์ดที่มีในเพลง (เว้นวรรค เช่น: <code class="bg-slate-700 text-amber-300 px-2 py-0.5 rounded">C Am F G</code>)</p>
+      
+      <div class="flex gap-2 mb-4">
+        <input type="text" id="chordInput" placeholder="ใส่คอร์ดที่นี่..." 
+               class="flex-1 bg-slate-900 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500">
+        <button onclick="analyzeKey()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2 rounded-lg transition">
+          วิเคราะห์คีย์
+        </button>
+      </div>
 
-        // ระบบควบคุมช่องใส่จำนวน
-        function handleTimeTypeChange() {
-            const timeType = document.getElementById('timeType').value;
-            const timeAmountInput = document.getElementById('timeAmount');
+      <div id="keyResults" class="hidden mt-4 pt-4 border-t border-slate-700">
+        <h3 class="text-sm font-semibold text-slate-400 mb-2">ผลการวิเคราะห์คีย์ที่เป็นไปได้มากที่สุด:</h3>
+        <div id="keyMatchList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+      </div>
+    </section>
 
-            if (timeType === 'PERMANENT') {
-                timeAmountInput.disabled = true;
-                timeAmountInput.value = '';
-                timeAmountInput.placeholder = 'ถาวร (ไม่ต้องระบุจำนวน)';
-            } else {
-                timeAmountInput.disabled = false;
-                timeAmountInput.value = '1';
-                timeAmountInput.placeholder = 'กรอกจำนวน 1-999...';
-            }
-        }
+    <!-- Section 2: Transposer -->
+    <section class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-md">
+      <h2 class="text-xl font-semibold text-indigo-300 mb-4 flex items-center gap-2">
+        <span>🎼</span> ย้ายคีย์คอร์ด (Chord Transposer)
+      </h2>
+      <div class="space-y-4">
+        <textarea id="transposeInput" rows="5" placeholder="[C] วันนี้ [Am] ที่เราได้มาเจอ [F] อยากบอกเธอ [G] ว่า..." 
+                  class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 font-mono text-sm text-slate-200 focus:outline-none focus:border-indigo-500"></textarea>
+        
+        <div class="flex items-center gap-2 bg-slate-900/50 p-3 rounded-lg">
+          <span class="text-sm text-slate-400">ปรับคีย์:</span>
+          <button onclick="transpose(-1)" class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded text-lg font-bold">-1</button>
+          <span id="shiftCount" class="font-bold text-indigo-400 px-2">0 Semitones</span>
+          <button onclick="transpose(1)" class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded text-lg font-bold">+1</button>
+        </div>
 
-        // สุ่มรหัสตัวอักษร 1-10 ตัว
-        function getRandomCode() {
-            const randomLength = Math.floor(Math.random() * 10) + 1;
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let code = '';
-            for (let i = 0; i < randomLength; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
-        }
+        <pre id="transposeOutput" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-4 font-mono text-amber-300 whitespace-pre-wrap min-h-[100px] text-sm"></pre>
+      </div>
+    </section>
+  </main>
 
-        // ระบบสร้างคีย์
-        function generateKey() {
-            const timeType = document.getElementById('timeType').value;
-            const timeAmountInput = document.getElementById('timeAmount');
-            let amount = parseInt(timeAmountInput.value);
+  <script>
+    // --- Key Verification Logic ---
+    function checkSavedKey() {
+      const savedKey = localStorage.getItem('user_access_key');
+      if (savedKey && isValidKeyFormat(savedKey)) {
+        document.getElementById('keyModal').classList.add('hidden');
+      }
+    }
 
-            if (timeType !== 'PERMANENT') {
-                if (isNaN(amount) || amount < 1) amount = 1;
-                if (amount > 999) amount = 999;
-                timeAmountInput.value = amount;
-            }
+    function isValidKeyFormat(key) {
+      // ตรวจสอบว่าคีย์ขึ้นต้นด้วย KEY- และมีความยาวถูกต้องหรือไม่
+      return /^KEY-[A-Z0-9]{4}-[A-Z0-9]{4}$/i.test(key.trim());
+    }
 
-            const randomCode = getRandomCode();
-            const timePrefix = timeType === 'PERMANENT' ? 'PERMANENT' : `${amount}${timeType}`;
-            const finalKey = `VIP-${timePrefix}-${randomCode}`;
+    function verifyKey() {
+      const input = document.getElementById('accessKeyInput').value.trim();
+      const errorEl = document.getElementById('keyError');
 
-            document.getElementById('generatedKey').innerText = finalKey;
-            document.getElementById('keyResultBox').style.display = 'block';
-        }
+      if (isValidKeyFormat(input)) {
+        localStorage.setItem('user_access_key', input);
+        document.getElementById('keyModal').classList.add('hidden');
+        errorEl.classList.add('hidden');
+      } else {
+        errorEl.classList.remove('hidden');
+      }
+    }
 
-        // คัดลอกคีย์
-        function copyKey() {
-            const keyText = document.getElementById('generatedKey').innerText;
-            navigator.clipboard.writeText(keyText).then(() => {
-                alert('คัดลอกคีย์เรียบร้อยแล้ว: ' + keyText);
-            });
-        }
+    function lockSystem() {
+      localStorage.removeItem('user_access_key');
+      document.getElementById('keyModal').classList.remove('hidden');
+    }
 
-        // ระบบสุ่มสร้างคำว่า REALPOOH ลอยขึ้นเรื่อยๆ
-        const bgContainer = document.getElementById('bgContainer');
+    // --- Music App Logic ---
+    const NOTES_SHARP = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const NOTES_FLAT  = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
+    const MAJOR_SCALE = [0, 2, 4, 5, 7, 9, 11];
+    const MINOR_SCALE = [0, 2, 3, 5, 7, 8, 10];
+    const MAJOR_CHORD_TYPES = ['', 'm', 'm', '', '', 'm', 'dim'];
+    const MINOR_CHORD_TYPES = ['m', 'dim', '', 'm', 'm', '', ''];
+    let currentShift = 0;
 
-        function createFloatingWord() {
-            const word = document.createElement('div');
-            word.classList.add('floating-word', 'bubble-font');
-            word.innerText = 'REALPOOH';
+    function parseChordRoot(c) {
+      let m = c.trim().match(/^([A-G][#b]?)/i);
+      return m ? m[1].toUpperCase() : null;
+    }
+    function noteToVal(n) {
+      let idx = NOTES_SHARP.indexOf(n);
+      return idx !== -1 ? idx : NOTES_FLAT.indexOf(n);
+    }
 
-            const randomX = Math.random() * 90;
-            const randomSize = Math.floor(Math.random() * 25) + 30;
-            const randomDuration = Math.floor(Math.random() * 6) + 8;
+    function analyzeKey() {
+      const input = document.getElementById('chordInput').value;
+      const rawChords = input.split(/\s+/).filter(c => c.length > 0);
+      const userRoots = [...new Set(rawChords.map(parseChordRoot).filter(r => r !== null))];
+      if (!userRoots.length) return alert('กรุณากรอกคอร์ดที่ถูกต้อง');
 
-            word.style.left = randomX + 'vw';
-            word.style.fontSize = randomSize + 'px';
-            word.style.animationDuration = randomDuration + 's';
+      const results = [];
+      for (let i = 0; i < 12; i++) {
+        const majN = MAJOR_SCALE.map(s => (i + s) % 12);
+        const minN = MINOR_SCALE.map(s => (i + s) % 12);
+        let majM = 0, minM = 0;
+        userRoots.forEach(r => {
+          if (majN.includes(noteToVal(r))) majM++;
+          if (minN.includes(noteToVal(r))) minM++;
+        });
 
-            bgContainer.appendChild(word);
+        results.push({ key: NOTES_SHARP[i] + ' Major', score: Math.round((majM / userRoots.length) * 100) });
+        results.push({ key: NOTES_SHARP[i] + ' Minor', score: Math.round((minM / userRoots.length) * 100) });
+      }
 
-            setTimeout(() => {
-                word.remove();
-            }, randomDuration * 1000);
-        }
+      results.sort((a, b) => b.score - a.score);
+      const listEl = document.getElementById('keyMatchList');
+      listEl.innerHTML = '';
+      results.slice(0, 4).forEach(item => {
+        listEl.innerHTML += `
+          <div class="p-3 bg-slate-900 border border-slate-700 rounded-lg flex justify-between">
+            <span class="font-bold text-amber-300">${item.key}</span>
+            <span class="text-xs px-2 py-1 rounded bg-slate-800 text-emerald-400">ตรงกัน ${item.score}%</span>
+          </div>`;
+      });
+      document.getElementById('keyResults').classList.remove('hidden');
+    }
 
-        for (let i = 0; i < 6; i++) {
-            setTimeout(createFloatingWord, i * 800);
-        }
+    function transpose(delta) {
+      currentShift += delta;
+      document.getElementById('shiftCount').innerText = `${currentShift >= 0 ? '+' : ''}${currentShift} Semitones`;
+      const input = document.getElementById('transposeInput').value;
+      const transposed = input.replace(/([A-G][#b]?(?:m|maj|min|dim|aug|sus)?\d*)/g, (m) => {
+        let val = noteToVal(m.match(/^([A-G][#b]?)/i)[1]);
+        if (val === -1) return m;
+        let newVal = (val + delta) % 12;
+        if (newVal < 0) newVal += 12;
+        return m.replace(/^([A-G][#b]?)/i, NOTES_SHARP[newVal]);
+      });
+      document.getElementById('transposeInput').value = transposed;
+      document.getElementById('transposeOutput').innerText = transposed;
+    }
 
-        setInterval(createFloatingWord, 1200);
-    </script>
-
+    // Check saved key on page load
+    checkSavedKey();
+  </script>
 </body>
 </html>
