@@ -6,191 +6,252 @@
   <title>Music Key Finder & Transposer</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style> body { font-family: 'Kanit', sans-serif; } </style>
+  <style>
+    body { font-family: 'Kanit', sans-serif; }
+  </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen pb-12">
 
-  <!-- Modal / Key Gate System -->
-  <div id="keyModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center">
-      <div class="text-4xl mb-3">🔐</div>
-      <h2 class="text-2xl font-bold text-indigo-400 mb-2">ต้องใช้คีย์เพื่อเข้าใช้งาน</h2>
-      <p class="text-slate-400 text-sm mb-6">กดปุ่มด้านล่างเพื่อไปทำภารกิจรับคีย์สุ่ม แล้วนำคีย์มากรอกเพื่อปลดล็อก</p>
-
-      <!-- Linkvertise Target Link -->
-      <a href="https://linkvertise.com/your-link-here" target="_blank" rel="noopener noreferrer" 
-         class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition mb-6 flex items-center justify-center gap-2">
-        <span>🚀</span> <span>กดที่นี่เพื่อรับคีย์ (Linkvertise)</span>
-      </a>
-
-      <div class="space-y-3">
-        <input type="text" id="accessKeyInput" placeholder="กรอกคีย์ที่นี่ (เช่น KEY-XXXX-XXXX)" 
-               class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-center text-amber-300 font-mono focus:outline-none focus:border-indigo-500">
-        
-        <button onclick="verifyKey()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition">
-          ปลดล็อกเข้าใช้งาน
-        </button>
-      </div>
-      <p id="keyError" class="text-rose-400 text-xs mt-3 hidden">❌ คีย์ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง</p>
-    </div>
-  </div>
-
   <!-- Header -->
   <header class="bg-slate-800 border-b border-slate-700 py-6 mb-8 shadow-lg">
-    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
-      <div>
-        <h1 class="text-2xl font-bold text-indigo-400">🎵 Song Key Finder & Transposer</h1>
-        <p class="text-slate-400 text-xs">เครื่องมือค้นหาคีย์เพลงและย้ายคีย์คอร์ด</p>
-      </div>
-      <button onclick="lockSystem()" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-1.5 rounded-lg">
-        🔒 ล็อกระบบ
-      </button>
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h1 class="text-3xl font-bold text-indigo-400 mb-2">🎵 Song Key Finder & Transposer</h1>
+      <p class="text-slate-400 text-sm">เครื่องมือค้นหาคีย์เพลง ย้ายคีย์คอร์ด และเช็กตารางคอร์ดประจำคีย์</p>
     </div>
   </header>
 
   <main class="max-w-4xl mx-auto px-4 space-y-8">
-    <!-- Section 1: Key Finder -->
+
+    <!-- Section 1: ค้นหาคีย์จากคอร์ด -->
     <section class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-md">
       <h2 class="text-xl font-semibold text-indigo-300 mb-4 flex items-center gap-2">
         <span>🔍</span> ค้นหาคีย์จากกลุ่มคอร์ด (Key Finder)
       </h2>
-      <p class="text-slate-400 text-sm mb-3">พิมพ์คอร์ดที่มีในเพลง (เว้นวรรค เช่น: <code class="bg-slate-700 text-amber-300 px-2 py-0.5 rounded">C Am F G</code>)</p>
+      <p class="text-slate-400 text-sm mb-3">พิมพ์คอร์ดที่มีในเพลง (เว้นวรรค เช่น: <code class="bg-slate-700 text-amber-300 px-2 py-0.5 rounded">C Am F G</code> หรือ <code class="bg-slate-700 text-amber-300 px-2 py-0.5 rounded">G Em C D</code>)</p>
       
       <div class="flex gap-2 mb-4">
         <input type="text" id="chordInput" placeholder="ใส่คอร์ดที่นี่..." 
                class="flex-1 bg-slate-900 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500">
-        <button onclick="analyzeKey()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2 rounded-lg transition">
+        <button onclick="analyzeKey()" 
+                class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2 rounded-lg transition">
           วิเคราะห์คีย์
         </button>
       </div>
 
+      <!-- Result Area -->
       <div id="keyResults" class="hidden mt-4 pt-4 border-t border-slate-700">
         <h3 class="text-sm font-semibold text-slate-400 mb-2">ผลการวิเคราะห์คีย์ที่เป็นไปได้มากที่สุด:</h3>
         <div id="keyMatchList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
     </section>
 
-    <!-- Section 2: Transposer -->
+    <!-- Section 2: ย้ายคีย์คอร์ด (Transposer) -->
     <section class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-md">
       <h2 class="text-xl font-semibold text-indigo-300 mb-4 flex items-center gap-2">
         <span>🎼</span> ย้ายคีย์คอร์ด (Chord Transposer)
       </h2>
+      
       <div class="space-y-4">
-        <textarea id="transposeInput" rows="5" placeholder="[C] วันนี้ [Am] ที่เราได้มาเจอ [F] อยากบอกเธอ [G] ว่า..." 
-                  class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 font-mono text-sm text-slate-200 focus:outline-none focus:border-indigo-500"></textarea>
-        
-        <div class="flex items-center gap-2 bg-slate-900/50 p-3 rounded-lg">
-          <span class="text-sm text-slate-400">ปรับคีย์:</span>
-          <button onclick="transpose(-1)" class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded text-lg font-bold">-1</button>
-          <span id="shiftCount" class="font-bold text-indigo-400 px-2">0 Semitones</span>
-          <button onclick="transpose(1)" class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded text-lg font-bold">+1</button>
+        <div>
+          <label class="block text-slate-400 text-sm mb-1">วางเนื้อเพลงและคอร์ดที่นี่:</label>
+          <textarea id="transposeInput" rows="5" placeholder="[C] วันนี้ [Am] ที่เราได้มาเจอ [F] อยากบอกเธอ [G] ว่า..." 
+                    class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 font-mono text-sm text-slate-200 focus:outline-none focus:border-indigo-500"></textarea>
         </div>
 
-        <pre id="transposeOutput" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-4 font-mono text-amber-300 whitespace-pre-wrap min-h-[100px] text-sm"></pre>
+        <!-- Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-900/50 p-3 rounded-lg">
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-slate-400">ปรับคีย์:</span>
+            <button onclick="transpose(-1)" class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded text-lg font-bold">-1</button>
+            <span id="shiftCount" class="font-bold text-indigo-400 px-2">0 Semitones</span>
+            <button onclick="transpose(1)" class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded text-lg font-bold">+1</button>
+            <button onclick="resetTranspose()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-400 px-2 py-1 rounded ml-2">รีเซ็ต</button>
+          </div>
+        </div>
+
+        <!-- Transposed Output -->
+        <div>
+          <label class="block text-slate-400 text-sm mb-1">ผลลัพธ์หลังย้ายคีย์:</label>
+          <pre id="transposeOutput" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-4 font-mono text-amber-300 whitespace-pre-wrap min-h-[100px] text-sm"></pre>
+        </div>
       </div>
     </section>
+
+    <!-- Section 3: ตารางคอร์ดประจำคีย์ -->
+    <section class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-md">
+      <h2 class="text-xl font-semibold text-indigo-300 mb-4 flex items-center gap-2">
+        <span>🎹</span> เช็กตารางคอร์ดประจำคีย์ (Diatonic Chords)
+      </h2>
+      
+      <div class="flex items-center gap-3 mb-4">
+        <label class="text-slate-400 text-sm">เลือกคีย์:</label>
+        <select id="keySelect" onchange="showDiatonicChords()" class="bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none">
+          <!-- Populated by JS -->
+        </select>
+      </div>
+
+      <div id="diatonicTable" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2"></div>
+    </section>
+
   </main>
 
   <script>
-    // --- Key Verification Logic ---
-    function checkSavedKey() {
-      const savedKey = localStorage.getItem('user_access_key');
-      if (savedKey && isValidKeyFormat(savedKey)) {
-        document.getElementById('keyModal').classList.add('hidden');
-      }
-    }
-
-    function isValidKeyFormat(key) {
-      // ตรวจสอบว่าคีย์ขึ้นต้นด้วย KEY- และมีความยาวถูกต้องหรือไม่
-      return /^KEY-[A-Z0-9]{4}-[A-Z0-9]{4}$/i.test(key.trim());
-    }
-
-    function verifyKey() {
-      const input = document.getElementById('accessKeyInput').value.trim();
-      const errorEl = document.getElementById('keyError');
-
-      if (isValidKeyFormat(input)) {
-        localStorage.setItem('user_access_key', input);
-        document.getElementById('keyModal').classList.add('hidden');
-        errorEl.classList.add('hidden');
-      } else {
-        errorEl.classList.remove('hidden');
-      }
-    }
-
-    function lockSystem() {
-      localStorage.removeItem('user_access_key');
-      document.getElementById('keyModal').classList.remove('hidden');
-    }
-
-    // --- Music App Logic ---
     const NOTES_SHARP = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     const NOTES_FLAT  = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
+
     const MAJOR_SCALE = [0, 2, 4, 5, 7, 9, 11];
     const MINOR_SCALE = [0, 2, 3, 5, 7, 8, 10];
+
     const MAJOR_CHORD_TYPES = ['', 'm', 'm', '', '', 'm', 'dim'];
     const MINOR_CHORD_TYPES = ['m', 'dim', '', 'm', 'm', '', ''];
+    const ROMAN_MAJOR = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'];
+
     let currentShift = 0;
 
-    function parseChordRoot(c) {
-      let m = c.trim().match(/^([A-G][#b]?)/i);
-      return m ? m[1].toUpperCase() : null;
+    // --- Key Analyzer ---
+    function parseChordRoot(chordStr) {
+      chordStr = chordStr.trim();
+      if (!chordStr) return null;
+      let match = chordStr.match(/^([A-G][#b]?)/i);
+      if (!match) return null;
+      let root = match[1].toUpperCase();
+      if (root.length > 1 && root[1] === 'B') root = root[0] + 'b';
+      return root;
     }
-    function noteToVal(n) {
-      let idx = NOTES_SHARP.indexOf(n);
-      return idx !== -1 ? idx : NOTES_FLAT.indexOf(n);
+
+    function noteToVal(note) {
+      let idx = NOTES_SHARP.indexOf(note);
+      if (idx !== -1) return idx;
+      return NOTES_FLAT.indexOf(note);
     }
 
     function analyzeKey() {
       const input = document.getElementById('chordInput').value;
       const rawChords = input.split(/\s+/).filter(c => c.length > 0);
       const userRoots = [...new Set(rawChords.map(parseChordRoot).filter(r => r !== null))];
-      if (!userRoots.length) return alert('กรุณากรอกคอร์ดที่ถูกต้อง');
+
+      if (userRoots.length === 0) {
+        alert('กรุณากรอกคอร์ดที่ถูกต้อง เช่น C, Am, F, G');
+        return;
+      }
 
       const results = [];
+
       for (let i = 0; i < 12; i++) {
-        const majN = MAJOR_SCALE.map(s => (i + s) % 12);
-        const minN = MINOR_SCALE.map(s => (i + s) % 12);
-        let majM = 0, minM = 0;
+        const rootNote = NOTES_SHARP[i];
+
+        const majorNotes = MAJOR_SCALE.map(step => (i + step) % 12);
+        let majMatches = 0;
         userRoots.forEach(r => {
-          if (majN.includes(noteToVal(r))) majM++;
-          if (minN.includes(noteToVal(r))) minM++;
+          if (majorNotes.includes(noteToVal(r))) majMatches++;
         });
 
-        results.push({ key: NOTES_SHARP[i] + ' Major', score: Math.round((majM / userRoots.length) * 100) });
-        results.push({ key: NOTES_SHARP[i] + ' Minor', score: Math.round((minM / userRoots.length) * 100) });
+        const minorNotes = MINOR_SCALE.map(step => (i + step) % 12);
+        let minMatches = 0;
+        userRoots.forEach(r => {
+          if (minorNotes.includes(noteToVal(r))) minMatches++;
+        });
+
+        results.push({
+          key: rootNote + ' Major',
+          score: Math.round((majMatches / userRoots.length) * 100),
+          chords: MAJOR_SCALE.map((s, idx) => NOTES_SHARP[(i + s) % 12] + MAJOR_CHORD_TYPES[idx])
+        });
+
+        results.push({
+          key: rootNote + ' Minor',
+          score: Math.round((minMatches / userRoots.length) * 100),
+          chords: MINOR_SCALE.map((s, idx) => NOTES_SHARP[(i + s) % 12] + MINOR_CHORD_TYPES[idx])
+        });
       }
 
       results.sort((a, b) => b.score - a.score);
+
       const listEl = document.getElementById('keyMatchList');
       listEl.innerHTML = '';
+
       results.slice(0, 4).forEach(item => {
-        listEl.innerHTML += `
-          <div class="p-3 bg-slate-900 border border-slate-700 rounded-lg flex justify-between">
-            <span class="font-bold text-amber-300">${item.key}</span>
-            <span class="text-xs px-2 py-1 rounded bg-slate-800 text-emerald-400">ตรงกัน ${item.score}%</span>
-          </div>`;
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-lg border ${item.score >= 80 ? 'bg-indigo-950/60 border-indigo-500' : 'bg-slate-900 border-slate-700'}`;
+        card.innerHTML = `
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-lg text-amber-300">${item.key}</span>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded ${item.score >= 80 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-700 text-slate-300'}">ตรงกัน ${item.score}%</span>
+          </div>
+          <p class="text-xs text-slate-400">คอร์ดในคีย์: <span class="text-slate-200">${item.chords.join(' - ')}</span></p>
+        `;
+        listEl.appendChild(card);
       });
+
       document.getElementById('keyResults').classList.remove('hidden');
+    }
+
+    // --- Transposer ---
+    function transposeNote(note, shift) {
+      let val = noteToVal(note);
+      if (val === -1) return note;
+      let newVal = (val + shift) % 12;
+      if (newVal < 0) newVal += 12;
+      return NOTES_SHARP[newVal];
+    }
+
+    function transposeChord(chord, shift) {
+      return chord.replace(/([A-G][#b]?)/g, (m) => transposeNote(m, shift));
     }
 
     function transpose(delta) {
       currentShift += delta;
       document.getElementById('shiftCount').innerText = `${currentShift >= 0 ? '+' : ''}${currentShift} Semitones`;
+      
       const input = document.getElementById('transposeInput').value;
-      const transposed = input.replace(/([A-G][#b]?(?:m|maj|min|dim|aug|sus)?\d*)/g, (m) => {
-        let val = noteToVal(m.match(/^([A-G][#b]?)/i)[1]);
-        if (val === -1) return m;
-        let newVal = (val + delta) % 12;
-        if (newVal < 0) newVal += 12;
-        return m.replace(/^([A-G][#b]?)/i, NOTES_SHARP[newVal]);
+      const transposed = input.replace(/([A-G][#b]?(?:m|maj|min|dim|aug|sus|add)?\d*(?:\/[A-G][#b]?)?)/g, (match) => {
+        return transposeChord(match, delta);
       });
+
       document.getElementById('transposeInput').value = transposed;
       document.getElementById('transposeOutput').innerText = transposed;
     }
 
-    // Check saved key on page load
-    checkSavedKey();
+    function resetTranspose() {
+      currentShift = 0;
+      document.getElementById('shiftCount').innerText = '0 Semitones';
+      document.getElementById('transposeOutput').innerText = document.getElementById('transposeInput').value;
+    }
+
+    document.getElementById('transposeInput').addEventListener('input', (e) => {
+      document.getElementById('transposeOutput').innerText = e.target.value;
+    });
+
+    // --- Diatonic Table ---
+    function initDiatonicSelect() {
+      const select = document.getElementById('keySelect');
+      NOTES_SHARP.forEach(note => {
+        select.innerHTML += `<option value="${note}">${note} Major</option>`;
+      });
+      showDiatonicChords();
+    }
+
+    function showDiatonicChords() {
+      const root = document.getElementById('keySelect').value;
+      const rootVal = noteToVal(root);
+      const container = document.getElementById('diatonicTable');
+      container.innerHTML = '';
+
+      MAJOR_SCALE.forEach((step, i) => {
+        const note = NOTES_SHARP[(rootVal + step) % 12];
+        const chord = note + MAJOR_CHORD_TYPES[i];
+        
+        container.innerHTML += `
+          <div class="bg-slate-900 p-3 rounded-lg text-center border border-slate-700">
+            <div class="text-xs text-indigo-400 font-semibold mb-1">${ROMAN_MAJOR[i]}</div>
+            <div class="text-base font-bold text-amber-300">${chord}</div>
+          </div>
+        `;
+      });
+    }
+
+    // Init
+    initDiatonicSelect();
   </script>
 </body>
 </html>
